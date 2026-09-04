@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4a5ee0">
+<link rel="manifest" href="./manifest.json">
+<title>PPS SCHOOL TOOLS</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@600;700&family=Inter:wght@500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap');
+
+:root{
+  --bg1:#cfe6fb;
+  --bg2:#5f9de3;
+  --card1:#d9edff;
+  --card2:#9dcbf3;
+  --pill:#f5f8fc;
+  --pill-border:#e1ecf8;
+  --ink:#1c2536;
+  --ink-soft:#5c6d8a;
+  --accent1:#6b7bf5;
+  --accent2:#4a5ee0;
+  --absent-dot:#ff6f6f;
+  --leave-dot:#ffb347;
+  --wa-green:#178a4c;
+  --wa-green-2:#1fa85c;
+  --danger:#e0453a;
+  --warn:#c9701a;
+  --warn-bg:#fdeee0;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family:'Inter',Arial,sans-serif; min-height:100vh;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255,255,255,.35), transparent 45%),
+    linear-gradient(150deg, var(--bg1) 0%, var(--bg2) 100%);
+  color:var(--ink); padding:30px 14px 44px; font-weight:600;
+}
+.container{max-width:600px;margin:auto; position:relative}
+
+/* ---------- shared card / form primitives ---------- */
+.card{
+  background:linear-gradient(150deg, var(--card1) 0%, var(--card2) 100%);
+  border-radius:34px;
+  padding:26px 22px 24px;
+  box-shadow:
+    0 22px 0 -4px rgba(24,60,110,.10),
+    0 30px 50px rgba(24,60,110,.35),
+    inset 0 2px 0 rgba(255,255,255,.6),
+    inset 0 -18px 30px rgba(24,60,110,.10);
+  position:relative;
+  margin-bottom:16px;
+}
+
+.head-row{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:18px}
+h1,.panel-title{
+  margin:0; font-family:'Zilla Slab',serif; font-weight:700;
+  font-size:27px; color:var(--ink); letter-spacing:.3px;
+}
+.att-letter{display:inline-block;opacity:0;animation:rollCall 2.6s ease forwards;animation-delay:calc(var(--i) * .07s)}
+@keyframes rollCall{0%{opacity:0; transform:translateY(-6px)}60%{opacity:1; transform:translateY(0)}100%{opacity:1}}
+.subtitle{
+  margin:0; font-size:11.5px; color:#fff; font-weight:700; letter-spacing:.4px;
+  background:linear-gradient(135deg, var(--accent1), var(--accent2));
+  padding:9px 16px; border-radius:999px; white-space:nowrap;
+  box-shadow:0 8px 16px rgba(74,94,224,.4), inset 0 1px 0 rgba(255,255,255,.4);
+}
+.panel-desc{margin:0 0 6px; font-size:13px; color:var(--ink-soft); font-weight:600; line-height:1.5}
+
+label,.lbl{display:block;font-weight:700;margin:16px 0 8px;color:var(--ink); font-size:12.5px; text-transform:uppercase; letter-spacing:.4px; opacity:.75}
+.field{margin-bottom:2px}
+.field .lbl{margin-top:16px}
+
+input,textarea{
+  width:100%;padding:14px 18px;border:1px solid var(--pill-border);
+  border-radius:22px;font-size:15.5px;outline:none;background:var(--pill);
+  color:var(--ink); font-family:inherit; font-weight:700;
+  box-shadow:inset 0 2px 4px rgba(24,60,110,.08), 0 1px 0 rgba(255,255,255,.7);
+  transition:box-shadow .15s, background .15s;
+}
+input[type="text"],input[type="tel"],input[type="date"],input[type="number"]{border-radius:999px}
+textarea{border-radius:20px; resize:vertical}
+input::placeholder,textarea::placeholder{color:#9aa8c0; font-weight:600}
+input:focus,textarea:focus{
+  background:#fff;
+  box-shadow:inset 0 2px 4px rgba(24,60,110,.08), 0 0 0 3px rgba(107,123,245,.28);
+}
+input[readonly]{color:var(--ink-soft)}
+#att-className{text-transform:uppercase; font-weight:700; letter-spacing:.3px}
+
+.section-title{
+  text-transform:uppercase;
+  font-size:12px; font-weight:800; color:var(--accent2); text-transform:uppercase;
+  letter-spacing:.5px; margin:4px 0 12px; padding-left:12px; border-left:3px solid var(--accent1);
+}
+
+.section-heading{display:flex;justify-content:space-between;align-items:center;margin-top:22px}
+.section-heading label{margin:0}
+.count-badge{
+  font-size:11.5px; font-weight:800; color:#fff;
+  background:linear-gradient(135deg, var(--accent1), var(--accent2));
+  padding:3px 11px; border-radius:999px;
+  box-shadow:0 4px 10px rgba(74,94,224,.35);
+}
+
+.hint{font-size:11px; color:var(--ink-soft); margin-top:6px; font-weight:600; padding-left:6px}
+
+/* generic pill button */
+.btn{
+  border:none; cursor:pointer; font-family:'Zilla Slab',serif; font-weight:700;
+  border-radius:999px; display:flex; align-items:center; justify-content:center; gap:7px;
+  width:100%; padding:15px 12px; font-size:14.5px; letter-spacing:.3px;
+  transition:transform .12s ease, filter .12s ease;
+}
+.btn:active{transform:scale(.97)}
+.btn-primary{
+  color:#fff; background:linear-gradient(150deg, var(--accent1), var(--accent2));
+  box-shadow:0 10px 0 -3px rgba(24,60,110,.12), 0 14px 24px rgba(74,94,224,.45), inset 0 1px 0 rgba(255,255,255,.4);
+}
+.btn-primary:hover{filter:brightness(1.05)}
+.btn-wa{
+  color:#fff; background:linear-gradient(150deg, var(--wa-green-2), var(--wa-green));
+  box-shadow:0 10px 0 -3px rgba(23,138,76,.18), 0 14px 24px rgba(23,138,76,.4), inset 0 1px 0 rgba(255,255,255,.35);
+}
+.btn-wa:hover{filter:brightness(1.05)}
+.btn-soft{
+  color:var(--ink); background:var(--pill);
+  box-shadow:0 10px 0 -3px rgba(24,60,110,.08), 0 14px 24px rgba(24,60,110,.18), inset 0 1px 0 rgba(255,255,255,.8);
+}
+.btn-soft:hover{background:#fff}
+.actions-row{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.wa-dot{display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--wa-green); margin-right:2px; vertical-align:middle}
+
+/* ---------- tab bar ---------- */
+.tabbar{
+  display:flex; gap:6px; background:rgba(255,255,255,.4); padding:6px;
+  border-radius:999px; margin-bottom:18px;
+  box-shadow:inset 0 2px 6px rgba(24,60,110,.12), 0 6px 16px rgba(24,60,110,.12);
+}
+.tab-btn{
+  flex:1; border:none; background:transparent; padding:12px 6px; border-radius:999px;
+  font-family:'Zilla Slab',serif; font-weight:700; font-size:12.5px; color:var(--ink-soft);
+  cursor:pointer; transition:background .35s ease, color .35s ease, box-shadow .35s ease, transform .35s ease; letter-spacing:.2px;
+}
+.tab-btn.active{
+  background:linear-gradient(135deg, var(--accent1), var(--accent2)); color:#fff;
+  box-shadow:0 6px 14px rgba(74,94,224,.4);
+}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* ---------- Attendance-tab specifics ---------- */
+.list-panel{
+  background:rgba(255,255,255,.35);
+  border-radius:22px;
+  padding:10px;
+  margin-top:8px;
+  box-shadow:inset 0 2px 8px rgba(24,60,110,.10);
+  position:relative;
+}
+.list-panel::before{
+  content:"";
+  position:absolute; top:-7px; left:50%; transform:translateX(-50%);
+  width:38px; height:6px; border-radius:6px;
+  background:rgba(255,255,255,.75);
+  box-shadow:0 1px 2px rgba(24,60,110,.2);
+}
+.list-panel:empty{display:none}
+.add{
+  border:none; background:rgba(255,255,255,.55); color:var(--accent2);
+  width:100%; padding:12px; border-radius:999px; font-size:14px; font-weight:800;
+  cursor:pointer; margin-top:10px; display:flex; align-items:center; justify-content:center; gap:6px;
+  box-shadow:0 4px 12px rgba(24,60,110,.12), inset 0 1px 0 rgba(255,255,255,.7);
+  transition:background .15s, transform .1s;
+}
+.add:hover{background:#fff}
+.add:active{transform:scale(.98)}
+.add .plus{font-size:17px; line-height:1}
+
+.row{display:flex; align-items:center; gap:10px; margin-top:8px; background:var(--pill);
+  border-radius:999px; padding:8px 10px 8px 8px;
+  box-shadow:0 4px 12px rgba(24,60,110,.10), inset 0 1px 0 rgba(255,255,255,.8);
+}
+.row:first-child{margin-top:0}
+.roll-no{
+  flex:0 0 auto; width:30px; height:30px; border-radius:50%;
+  background:linear-gradient(140deg, var(--accent1), var(--accent2));
+  color:#fff; font-size:12.5px; font-weight:800;
+  display:flex; align-items:center; justify-content:center; font-family:'Zilla Slab',serif;
+  box-shadow:0 4px 8px rgba(74,94,224,.4), inset 0 1px 0 rgba(255,255,255,.5);
+}
+#att-absentList .roll-no{background:linear-gradient(140deg,#ff8a8a,var(--absent-dot))}
+#att-leaveList .roll-no{background:linear-gradient(140deg,#ffcb7a,var(--leave-dot))}
+.row input{flex:1; box-shadow:none; background:transparent; border:none; padding:6px 4px; border-radius:0}
+.row input:focus{box-shadow:none; background:transparent}
+.remove{
+  flex:0 0 auto; width:28px; height:28px; border:0;
+  background:linear-gradient(140deg, var(--accent1), var(--accent2));
+  color:#fff; font-size:16px; cursor:pointer; border-radius:50%;
+  box-shadow:0 4px 8px rgba(74,94,224,.4);
+  transition:transform .1s, filter .15s;
+  display:flex; align-items:center; justify-content:center;
+}
+.remove:hover{filter:brightness(1.1)}
+.remove:active{transform:scale(.9)}
+.att-buttons{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:30px}
+.stamp{
+  position:relative; border:none; border-radius:999px;
+  padding:16px 8px; font-family:'Zilla Slab',serif; font-weight:700; font-size:14.5px;
+  letter-spacing:.4px; cursor:pointer;
+  transition:transform .12s ease, filter .12s ease;
+}
+.stamp:active{transform:scale(.96)}
+.stamp.female{
+  color:#fff; background:linear-gradient(150deg, var(--accent1), var(--accent2));
+  box-shadow:0 10px 0 -3px rgba(24,60,110,.12), 0 14px 24px rgba(74,94,224,.45), inset 0 1px 0 rgba(255,255,255,.4);
+}
+.stamp.female:hover{filter:brightness(1.05)}
+.stamp.male{
+  color:var(--ink); background:var(--pill);
+  box-shadow:0 10px 0 -3px rgba(24,60,110,.08), 0 14px 24px rgba(24,60,110,.18), inset 0 1px 0 rgba(255,255,255,.8);
+}
+.stamp.male:hover{filter:brightness(1.05)}
+
+/* ---------- Fee Receipt tab specifics ---------- */
+.check-row{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:12px 16px; border-radius:999px; margin-bottom:9px;
+  background:var(--pill); box-shadow:inset 0 2px 4px rgba(24,60,110,.08), 0 1px 0 rgba(255,255,255,.7);
+  transition:box-shadow .15s;
+}
+.check-row.on{box-shadow:inset 0 2px 4px rgba(24,60,110,.08), 0 0 0 3px rgba(107,123,245,.28); background:#fff}
+.check-row label{display:flex; align-items:center; gap:9px; font-size:14px; font-weight:700; flex:1; margin:0; text-transform:none; letter-spacing:0; opacity:1}
+.check-row input[type="checkbox"]{width:19px; height:19px; accent-color:var(--accent2)}
+.check-row .amt{width:100px; padding:8px 12px; display:none; font-size:14px; border-radius:14px}
+.check-row.on .amt{display:block}
+
+.total-box{
+  background:rgba(255,255,255,.5); border-radius:20px; padding:14px 18px;
+  display:flex; justify-content:space-between; align-items:center; margin:14px 0;
+  font-weight:700; box-shadow:inset 0 2px 6px rgba(24,60,110,.08);
+}
+.total-box .amount{font-family:'Zilla Slab',serif; font-size:19px; color:var(--accent2)}
+
+.receipt{
+  background:rgba(255,255,255,.55); border-radius:24px; padding:22px 20px 18px;
+  position:relative; overflow:hidden; margin-top:10px;
+  box-shadow:inset 0 2px 8px rgba(24,60,110,.10);
+}
+.watermark{
+  position:absolute; top:38%; left:50%; transform:translate(-50%,-50%) rotate(-18deg);
+  font-family:'Zilla Slab',serif; font-size:60px; font-weight:700; color:var(--accent2);
+  opacity:.05; white-space:nowrap; pointer-events:none;
+}
+.receipt-head{position:relative; display:flex; justify-content:space-between; align-items:flex-start}
+.receipt-head .r{text-align:right}
+.receipt-head .r .lbl{font-size:10px; margin:0 0 2px; opacity:.7; text-transform:uppercase; letter-spacing:.3px}
+.receipt-head .r .val{font-family:'Zilla Slab',serif; font-size:14px; font-weight:700; color:var(--accent2)}
+.receipt-no-blank{display:inline-block; min-width:60px; border-bottom:1.3px solid var(--ink-soft)}
+.dashed{height:0; border-top:1.5px dashed rgba(28,37,54,.18); margin:16px 0 14px}
+.grid2{position:relative; display:grid; grid-template-columns:1fr 1fr; row-gap:12px; column-gap:10px; font-size:13.5px}
+.grid2 .l{font-size:10px; color:var(--ink-soft); margin-bottom:2px; text-transform:uppercase; letter-spacing:.3px; font-weight:700}
+.grid2 .v{font-weight:700; color:var(--ink)}
+.fee-list-title{font-size:11px; color:var(--ink-soft); margin-bottom:6px; font-weight:700; text-transform:uppercase; letter-spacing:.3px}
+.fee-line{display:flex; justify-content:space-between; font-size:13.5px; padding:6px 0; border-bottom:1px solid rgba(28,37,54,.10)}
+.fee-line .amt{font-weight:700}
+.grand-total{
+  margin-top:14px; background:rgba(255,255,255,.6); border-radius:16px; padding:13px 16px;
+  display:flex; justify-content:space-between; align-items:center; box-shadow:inset 0 2px 6px rgba(24,60,110,.08);
+}
+.grand-total .label{font-size:12.5px; color:var(--ink); font-weight:700}
+.grand-total .amount{font-family:'Zilla Slab',serif; font-size:20px; font-weight:700; color:var(--accent2)}
+.arrears-row{
+  margin-top:8px; background:var(--warn-bg); border-radius:16px; padding:11px 16px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.arrears-row .label{font-size:12px; color:var(--warn); font-weight:700}
+.arrears-row .amount{font-family:'Zilla Slab',serif; font-size:15px; font-weight:700; color:var(--warn)}
+.receipt-msg{
+  margin-top:16px; font-size:14.5px; color:var(--ink); line-height:1.85;
+  font-family:'Noto Nastaliq Urdu', serif; direction:rtl; text-align:right; white-space:pre-line;
+}
+#fr-message{direction:rtl; text-align:right; font-family:'Noto Nastaliq Urdu', serif; font-size:15px}
+
+/* ---------- Fee Reminder tab specifics ---------- */
+.total-payable{
+  margin-top:19px; padding:16px 18px; background:rgba(255,255,255,.5); border-radius:20px;
+  display:flex; justify-content:space-between; align-items:center; direction:ltr;
+  box-shadow:inset 0 2px 6px rgba(24,60,110,.08);
+}
+.total-payable span{font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.3px; color:var(--ink-soft)}
+.total-payable strong{font-family:'Zilla Slab',serif; font-size:22px; color:var(--accent2)}
+.fm-buttons{display:grid; gap:10px; margin-top:16px}
+.fm-preview{display:none; margin-top:16px; padding:16px; border-radius:20px; background:rgba(255,255,255,.5)}
+.fm-preview.show{display:block}
+.fm-preview h3{margin:0 0 10px; font-family:'Zilla Slab',serif; color:var(--accent2); font-size:15px}
+.fm-preview-text{white-space:pre-wrap; direction:rtl; text-align:right; font-family:'Noto Nastaliq Urdu', serif; font-size:14px; line-height:1.8; color:var(--ink)}
+.fm-preview-type{font-size:11px; color:var(--ink-soft); margin-bottom:10px; font-weight:600}
+
+#preview{
+  white-space:pre-wrap;background:rgba(255,255,255,.6);border:none;
+  border-radius:18px;padding:14px;margin-top:18px;font-size:13.5px;display:none;
+  font-family:'Inter',monospace; color:var(--ink); font-weight:600;
+  box-shadow:inset 0 2px 6px rgba(24,60,110,.10);
+}
+.footer{text-align:center;color:rgba(28,37,54,.55);font-size:11px;margin-top:16px; font-weight:700}
+
+@media(max-width:430px){
+  .att-buttons{grid-template-columns:1fr 1fr; gap:8px}
+  .stamp{padding:13px 4px; font-size:12.5px}
+  .card{padding:22px 16px 20px; border-radius:28px}
+  .subtitle{font-size:10px; padding:8px 12px}
+  .grid2{grid-template-columns:1fr}
+  .actions-row{grid-template-columns:1fr}
+}
+
+/* ---------- Welcome screen ---------- */
+#welcome{
+  position:fixed; inset:0; z-index:50;
+  display:flex; align-items:center; justify-content:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255,255,255,.35), transparent 45%),
+    linear-gradient(150deg, var(--bg1) 0%, var(--bg2) 100%);
+  transition:opacity .45s ease, visibility .45s ease;
+}
+#welcome.hide{opacity:0; visibility:hidden; pointer-events:none}
+.welcome-card{
+  max-width:380px; width:100%; text-align:center;
+  background:linear-gradient(150deg, var(--card1) 0%, var(--card2) 100%);
+  border-radius:34px; padding:44px 30px 34px;
+  box-shadow:
+    0 22px 0 -4px rgba(24,60,110,.10),
+    0 30px 50px rgba(24,60,110,.35),
+    inset 0 2px 0 rgba(255,255,255,.6),
+    inset 0 -18px 30px rgba(24,60,110,.10);
+  animation:floatIn .6s ease;
+}
+@keyframes floatIn{from{opacity:0; transform:translateY(14px) scale(.97)}to{opacity:1; transform:translateY(0) scale(1)}}
+.welcome-badge{
+  width:78px; height:78px; margin:0 auto 22px; border-radius:50%;
+  background:linear-gradient(140deg, var(--accent1), var(--accent2));
+  display:flex; align-items:center; justify-content:center;
+  font-size:34px; box-shadow:0 12px 24px rgba(74,94,224,.45), inset 0 2px 0 rgba(255,255,255,.4);
+  animation:pulseBadge 2.4s ease-in-out infinite;
+}
+@keyframes pulseBadge{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.welcome-title{font-family:'Zilla Slab',serif; font-weight:700; font-size:24px; color:var(--ink); margin:0 0 8px}
+#welcomeGreeting{display:block; font-size:13px; color:var(--ink-soft); font-weight:700; letter-spacing:.4px; text-transform:uppercase; margin-bottom:4px}
+.welcome-sub{font-size:14px; color:var(--ink-soft); font-weight:600; margin:0 0 28px; line-height:1.5}
+.welcome-start{
+  width:100%; border:none; border-radius:999px; padding:16px 8px;
+  font-family:'Zilla Slab',serif; font-weight:700; font-size:15.5px; letter-spacing:.4px;
+  color:#fff; cursor:pointer;
+  background:linear-gradient(150deg, var(--accent1), var(--accent2));
+  box-shadow:0 10px 0 -3px rgba(24,60,110,.12), 0 14px 24px rgba(74,94,224,.45), inset 0 1px 0 rgba(255,255,255,.4);
+  transition:transform .12s ease, filter .12s ease;
+}
+.welcome-start:hover{filter:brightness(1.05)}
+.welcome-start:active{transform:scale(.97)}
+
+#appRoot{opacity:0; transition:opacity .5s ease}
+#appRoot.show{opacity:1}
+
+/* ---------- Print (Fee Receipt only) ---------- */
+@media print{
+  body{background:#fff !important; padding:0 !important}
+  #welcome,.tabbar,.footer,.no-print{display:none !important}
+  #tab-attendance,#tab-reminder{display:none !important}
+  .container{max-width:none !important}
+  .receipt{box-shadow:none !important; background:#fff !important}
+  @page{size:A5; margin:12mm}
+  *{-webkit-print-color-adjust:exact !important; print-color-adjust:exact !important}
+}
+
+
+/* FEE TOOLS LOGIN */
+#feeLogin{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(20,35,65,.45);backdrop-filter:blur(7px)}
+#feeLogin.show{display:flex}
+.fee-login-card{width:min(380px,100%);padding:30px 24px 24px;text-align:center;background:linear-gradient(150deg,var(--card1),var(--card2));border-radius:30px;box-shadow:0 28px 60px rgba(24,60,110,.38),inset 0 2px 0 rgba(255,255,255,.65)}
+.fee-login-card h2{margin:0 0 8px;font-family:'Zilla Slab',serif;font-size:25px;text-transform:uppercase;color:var(--ink)}
+.fee-login-card p{margin:0 0 18px;color:var(--ink-soft);font-size:12.5px;font-weight:600}
+.fee-login-card input{text-align:center;letter-spacing:2px}
+.fee-login-error{min-height:18px;margin:8px 0 2px;color:var(--danger);font-size:12px;font-weight:800}
+.fee-login-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+
+/* GLITCH TITLES */
+h1,.panel-title{text-transform:uppercase}
+#attendanceTitle{position:relative;display:inline-block}
+#attendanceTitle.glitch,.panel-title.glitch{animation:glitchTitle 2.8s steps(1,end) infinite}
+@keyframes glitchTitle{0%,88%,100%{transform:none;text-shadow:none}89%{transform:translate(-2px,1px);text-shadow:2px 0 #ff3b81,-2px 0 #20d9ff}90%{transform:translate(2px,-1px);text-shadow:-2px 0 #ff3b81,2px 0 #20d9ff}91%{transform:none;text-shadow:none}93%{transform:translate(-1px,0);text-shadow:1px 0 #20d9ff,-1px 0 #ff3b81}94%{transform:none;text-shadow:none}}
+.att-letter{animation:none!important;opacity:1}
+
+/* NEON ATTENDANCE FIELD */
+#att-className{border:2px solid rgba(107,123,245,.65);box-shadow:0 0 8px rgba(107,123,245,.65),inset 0 2px 4px rgba(24,60,110,.08)}
+#att-className:focus{box-shadow:0 0 8px rgba(107,123,245,.8),0 0 18px rgba(107,123,245,.55),inset 0 2px 4px rgba(24,60,110,.08);animation:neonField 1.7s linear infinite}
+@keyframes neonField{0%{box-shadow:0 0 7px rgba(107,123,245,.7),0 0 0 2px rgba(107,123,245,.12)}25%{box-shadow:0 0 10px rgba(32,217,255,.85),0 0 0 2px rgba(32,217,255,.18)}50%{box-shadow:0 0 14px rgba(255,59,129,.8),0 0 0 2px rgba(255,59,129,.16)}75%{box-shadow:0 0 10px rgba(107,123,245,.85),0 0 0 2px rgba(107,123,245,.18)}100%{box-shadow:0 0 7px rgba(107,123,245,.7),0 0 0 2px rgba(107,123,245,.12)}}
+.att-class-error{display:none;margin-top:7px;padding:8px 12px;border-radius:14px;background:rgba(224,69,58,.12);color:#a92d25;font-size:13px;font-family:'Noto Nastaliq Urdu',serif;font-weight:700;text-align:right;direction:rtl}
+.att-class-error.show{display:block;animation:shake .25s linear}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.wa-dot{display:none!important}
+
+/* FEE DETAILS DROPDOWN */
+#fr-feeTypeSelect{width:100%;padding:14px 18px;border:1px solid var(--pill-border);border-radius:22px;font-size:15px;outline:none;background:var(--pill);color:var(--ink);font-family:inherit;font-weight:700;box-shadow:inset 0 2px 4px rgba(24,60,110,.08),0 1px 0 rgba(255,255,255,.7)}
+#fr-feeTypeSelect:focus{background:#fff;box-shadow:inset 0 2px 4px rgba(24,60,110,.08),0 0 0 3px rgba(107,123,245,.28)}
+#fr-feeAmountField{display:none;margin-top:10px}
+#fr-feeAmountField.show{display:block}
+
+</style>
+</head>
+<body>
+<div id="welcome">
+  <div class="welcome-card">
+    <div class="welcome-badge">👋</div>
+    <span id="welcomeGreeting">Good Morning</span>
+    <h2 class="welcome-title">Welcome, Teacher</h2>
+    <p class="welcome-sub">Mark attendance, send fee receipts, and send fee reminders — all from one place.</p>
+    <button class="welcome-start" type="button" onclick="attStartApp()">Get Started</button>
+  </div>
+</div>
+
+<div id="feeLogin" aria-hidden="true">
+  <div class="fee-login-card">
+    <h2>FEE TOOLS LOGIN</h2>
+    <p>FEE RECEIPT اور FEE REMINDER کے لیے پاس ورڈ درج کریں۔</p>
+    <input id="feeLoginPassword" type="password" placeholder="ENTER PASSWORD" autocomplete="off">
+    <div class="fee-login-error" id="feeLoginError"></div>
+    <div class="fee-login-actions">
+      <button class="btn btn-soft" type="button" onclick="closeFeeLogin()">CANCEL</button>
+      <button class="btn btn-primary" type="button" onclick="submitFeeLogin()">LOGIN</button>
+    </div>
+  </div>
+</div>
+
+<div id="appRoot">
+<div class="container">
+
+  <div class="tabbar">
+    <button class="tab-btn active" type="button" data-tab="attendance" onclick="switchTab('attendance')" >ATTENDANCE</button>
+    <button class="tab-btn" type="button" data-tab="receipt" onclick="switchTab('receipt')">FEE RECEIPT</button>
+    <button class="tab-btn" type="button" data-tab="reminder" onclick="switchTab('reminder')">FEE REMINDER</button>
+  </div>
+
+  <!-- ================= ATTENDANCE TAB ================= -->
+  <section id="tab-attendance" class="tab-panel active">
+    <div class="card">
+      <div class="head-row">
+        <h1 id="attendanceTitle" aria-label="ATTENDANCE"></h1>
+        <span class="subtitle">PPS DAILY ATTENDANCE</span>
+      </div>
+
+      <label>Attendance Date</label>
+      <input id="att-date" type="text" readonly>
+
+      <label>Class Name</label>
+      <input id="att-className" type="text" placeholder="e.g. 9TH A" autocomplete="off">
+      <div class="att-class-error" id="att-classError">صرف کلاس نام لکھنا ہے</div>
+
+      <div class="section-heading">
+        <label>Absent Students</label>
+        <span class="count-badge" id="att-absentCount">0</span>
+      </div>
+      <div class="list-panel"><div id="att-absentList"></div></div>
+      <button class="add" type="button" onclick="attAddStudent('absent')"><span class="plus">+</span> Add absent student</button>
+      <div class="hint">Add one student per field.</div>
+
+      <div class="section-heading">
+        <label>Students on Leave</label>
+        <span class="count-badge" id="att-leaveCount">0</span>
+      </div>
+      <div class="list-panel"><div id="att-leaveList"></div></div>
+      <button class="add" type="button" onclick="attAddStudent('leave')"><span class="plus">+</span> Add student on leave</button>
+      <div class="hint">Add students who are on leave.</div>
+
+      <label>Form Master Name</label>
+      <input id="att-master" type="text" placeholder="Enter form master's name" autocomplete="off">
+
+      <div class="att-buttons">
+        <button class="stamp female" type="button" onclick="attSendWhatsApp('03400968477')">FEMALE STAFF</button>
+        <button class="stamp male" type="button" onclick="attSendWhatsApp('03099795054')">MALE STAFF</button>
+      </div>
+
+      <div id="preview"></div>
+    </div>
+  </section>
+
+  <!-- ================= FEE RECEIPT TAB ================= -->
+  <section id="tab-receipt" class="tab-panel">
+    <div class="card no-print">
+      <div class="head-row">
+        <h1 class="panel-title glitch">FEE RECEIPT</h1>
+        <span class="subtitle">PPS FEE RECEIPT</span>
+      </div>
+      <p class="panel-desc">Fill in the details, then print or send straight to WhatsApp.</p>
+    </div>
+
+    <div class="card no-print">
+      <div class="section-title">Student Details</div>
+      <div class="field"><span class="lbl">Date</span><input type="date" id="fr-date"></div>
+      <div class="field"><span class="lbl">Receipt No.</span><input id="fr-receiptNo" placeholder="Optional — for your own records"></div>
+      <div class="field"><span class="lbl">Student name</span><input id="fr-studentName" placeholder="e.g. Ayesha Khan"></div>
+      <div class="field"><span class="lbl">Class</span><input id="fr-studentClass" placeholder="e.g. 6-B"></div>
+    </div>
+
+    <div class="card no-print">
+      <div class="section-title">FEE DETAILS</div>
+      <span class="lbl">SELECT FEE TYPE</span>
+      <select id="fr-feeTypeSelect">
+        <option value="">SELECT FEE TYPE</option>
+        <option value="monthly">MONTHLY FEE</option>
+        <option value="admission">ADMISSION FEE</option>
+        <option value="promotion">PROMOTION FEE</option>
+        <option value="exam">EXAM FEE</option>
+      </select>
+      <div class="field" id="fr-feeAmountField">
+        <span class="lbl">AMOUNT</span><input type="number" min="0" inputmode="numeric" placeholder="Rs." id="fr-selectedAmount">
+      </div>
+      <div class="field" id="fr-periodField" style="margin-top:10px; display:none;">
+        <span class="lbl">MONTH</span><input id="fr-period" placeholder="e.g. August 2026">
+      </div>
+      <div class="field"><span class="lbl">ARREARS (بقایا جات)</span><input type="number" placeholder="0" id="fr-arrears"></div>
+      <div class="total-box"><span>TOTAL</span><span class="amount" id="fr-formTotal">Rs. 0</span></div>
+    </div>
+
+    <div class="card no-print">
+      <div class="section-title">CONTACT</div>
+      <div class="field"><span class="lbl">GUARDIAN WHATSAPP NUMBER</span><input id="fr-guardianPhone" placeholder="03xx-xxxxxxx"></div>
+    </div>
+
+    <div class="no-print" style="display:flex; flex-direction:column; gap:10px; margin-top:-4px; margin-bottom:16px;">
+      <button class="btn btn-wa" id="fr-btnWhatsapp">WhatsApp</button>
+      <button class="btn btn-primary" id="fr-btnSms">SMS</button>
+    </div>
+
+    <div class="card no-print">
+      <div class="section-title">MESSAGE</div>
+      <div class="field"><span class="lbl">MESSAGE FOR PARENTS (URDU)</span><textarea id="fr-message" rows="3"></textarea></div>
+    </div>
+
+    <div class="card no-print">
+      <div class="section-title">Income Records</div>
+      <div class="total-box"><span>Saved receipts</span><span class="amount" id="fr-recordCount">0</span></div>
+      <div class="total-box"><span>Total income (excl. arrears)</span><span class="amount" id="fr-recordTotal">Rs. 0</span></div>
+      <button class="btn btn-soft" id="fr-btnConnectDrive" style="margin-bottom:10px;">🔗 Connect Google Account</button>
+      <div class="hint" id="fr-driveStatus" style="margin-bottom:12px;">Not connected — records save locally only.</div>
+      <button class="btn btn-primary" id="fr-btnSaveRecord" style="margin-bottom:10px;">💾 Save this receipt to records</button>
+      <div class="actions-row">
+        <button class="btn btn-soft" id="fr-btnExportPdf">📑 Export income (PDF)</button>
+        <button class="btn btn-soft" id="fr-btnClearRecords">🗑 Clear records</button>
+      </div>
+      <button class="btn btn-soft" id="fr-btnCopyRecords" style="margin-top:10px;">📋 Copy records for Drive backup</button>
+      <div class="hint">Once connected, saving a receipt also appends it to your Google Sheet automatically.</div>
+    </div>
+
+    <div class="card">
+      <div class="receipt" id="fr-receiptPreview">
+        <div class="watermark">PPS PPS PPS</div>
+        <div class="receipt-head">
+          <div>
+            <div class="panel-title" style="font-size:20px;">PPS</div>
+            <div class="hint" style="padding-left:0; margin-top:4px;">Fee Payment Receipt</div>
+          </div>
+          <div class="r">
+            <div class="lbl">Receipt No.</div>
+            <div class="receipt-no-blank">&nbsp;</div>
+          </div>
+        </div>
+        <div class="dashed"></div>
+        <div class="grid2">
+          <div><div class="l">Student</div><div class="v" id="fr-p-student">—</div></div>
+          <div><div class="l">Class</div><div class="v" id="fr-p-class">—</div></div>
+          <div><div class="l">Date</div><div class="v" id="fr-p-date">—</div></div>
+        </div>
+        <div style="margin-top:16px;">
+          <div class="fee-list-title">Fee breakdown</div>
+          <div id="fr-p-feeList"></div>
+        </div>
+        <div class="grand-total"><span class="label">Total received</span><span class="amount" id="fr-p-total">Rs. 0</span></div>
+        <div class="arrears-row" id="fr-arrearsRow" style="display:none;">
+          <span class="label">Arrears (بقایا جات)</span><span class="amount" id="fr-p-arrears">Rs. 0</span>
+        </div>
+        <div class="receipt-msg" id="fr-p-message"></div>
+      </div>
+    </div>
+
+    <div class="no-print" style="display:flex; flex-direction:column; gap:10px; margin-top:-4px;">
+      <div class="actions-row">
+        <button class="btn btn-soft" id="fr-btnPrint">🖨 PRINT RECEIPT</button>
+        <button class="btn btn-soft" id="fr-btnCopy">📋 COPY MESSAGE</button>
+      </div>
+      <div class="hint">WHATSAPP opens with the receipt pre-filled — you just hit send. SMS uses the SIM card's normal signal.</div>
+    </div>
+  </section>
+
+  <!-- ================= FEE REMINDER TAB ================= -->
+  <section id="tab-reminder" class="tab-panel">
+    <div class="card">
+      <div class="head-row">
+        <h1 class="panel-title glitch">FEE REMINDER</h1>
+        <span class="subtitle" id="fm-dateDisplay">FEE REMINDER</span>
+      </div>
+
+      <div class="field"><span class="lbl">Student Name</span><input id="fm-student" type="text" autocomplete="off" placeholder="Enter student name"></div>
+      <div class="field"><span class="lbl">Class</span><input id="fm-className" type="text" autocomplete="off" placeholder="Enter class"></div>
+
+      <div class="section-title" style="margin-top:20px;">Fee Details</div>
+      <div class="field"><span class="lbl">Previous Fee</span><input id="fm-previous" type="number" min="0" inputmode="numeric" placeholder="Enter amount"></div>
+      <div class="field"><span class="lbl">Current Fee</span><input id="fm-current" type="number" min="0" inputmode="numeric" placeholder="Enter amount"></div>
+      <div class="field"><span class="lbl">Promotion Fee</span><input id="fm-promotion" type="number" min="0" inputmode="numeric" placeholder="Enter amount"></div>
+      <div class="field"><span class="lbl">Admission Fee</span><input id="fm-admission" type="number" min="0" inputmode="numeric" placeholder="Enter amount"></div>
+      <div class="field"><span class="lbl">WhatsApp / Mobile Number</span><input id="fm-phone" type="tel" inputmode="tel" autocomplete="off" placeholder="03XXXXXXXXX"></div>
+
+      <div class="total-payable"><span>Total Payable</span><strong id="fm-total">Rs. 0</strong></div>
+
+      <div class="fm-buttons">
+        <button class="btn btn-wa" onclick="fmSendWhatsApp()">WhatsApp</button>
+        <button class="btn btn-primary" onclick="fmSendSMS()">SMS</button>
+        <button class="btn btn-soft" onclick="fmResetForm()">CLEAR / RESET</button>
+      </div>
+
+      <div class="fm-preview" id="fm-previewBox">
+        <h3>MESSAGE PREVIEW</h3>
+        <div class="fm-preview-type">WhatsApp format — bold text included</div>
+        <div class="fm-preview-text" id="fm-previewText"></div>
+        <button class="btn btn-primary" style="margin-top:12px;" onclick="fmCopyMessage()">Copy Message</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+<div class="footer">Rahim's Tools</div>
+</div>
+
+<script>
+/* ============================================================
+   SHARED: key-click sound + service worker (used across all tabs)
+   ============================================================ */
+let audioCtx;
+function playKeySound(deleting=false){
+  try{audioCtx ||= new (window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==="suspended") audioCtx.resume(); const o=audioCtx.createOscillator(),g=audioCtx.createGain(),n=audioCtx.currentTime; o.type="sine"; o.frequency.setValueAtTime(deleting?180:420,n); o.frequency.exponentialRampToValueAtTime(deleting?110:300,n+.045); g.gain.setValueAtTime(.0001,n); g.gain.exponentialRampToValueAtTime(deleting?.035:.025,n+.006); g.gain.exponentialRampToValueAtTime(.0001,n+.055); o.connect(g).connect(audioCtx.destination); o.start(n); o.stop(n+.06);}catch(e){}
+}
+document.addEventListener("input",e=>{if(e.target.matches("input,textarea")&&e.target.value)playKeySound(false);});
+document.addEventListener("keydown",e=>{if(e.target.matches("input,textarea")&&e.key==="Backspace")playKeySound(true);});
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+  });
+}
+
+/* ============================================================
+   SHARED: welcome screen + tab switching
+   ============================================================ */
+function attStartApp(){
+  document.getElementById("welcome").classList.add("hide");
+  document.getElementById("appRoot").classList.add("show");
+  document.getElementById("att-className").focus();
+}
+function setGreeting(){
+  const h=new Date().getHours();
+  const el=document.getElementById("welcomeGreeting");
+  el.textContent = h<12 ? "Good Morning" : h<17 ? "Good Afternoon" : "Good Evening";
+}
+setGreeting();
+
+let feeToolsUnlocked=sessionStorage.getItem("pps_fee_tools_unlocked")==="1";
+let feeTabPending=null;
+function openFeeLogin(target){
+  feeTabPending=target;
+  document.getElementById("feeLoginError").textContent="";
+  document.getElementById("feeLoginPassword").value="";
+  document.getElementById("feeLogin").classList.add("show");
+  document.getElementById("feeLogin").setAttribute("aria-hidden","false");
+  setTimeout(()=>document.getElementById("feeLoginPassword").focus(),50);
+}
+function closeFeeLogin(){
+  document.getElementById("feeLogin").classList.remove("show");
+  document.getElementById("feeLogin").setAttribute("aria-hidden","true");
+  feeTabPending=null;
+}
+function submitFeeLogin(){
+  const input=document.getElementById("feeLoginPassword");
+  if(input.value==="mr05"){
+    feeToolsUnlocked=true;
+    sessionStorage.setItem("pps_fee_tools_unlocked","1");
+    const target=feeTabPending||"receipt";
+    closeFeeLogin();
+    switchTab(target);
+  }else{
+    document.getElementById("feeLoginError").textContent="غلط پاس ورڈ۔ دوبارہ کوشش کریں۔";
+    input.select();
+  }
+}
+document.getElementById("feeLoginPassword").addEventListener("keydown",e=>{if(e.key==="Enter")submitFeeLogin();});
+function switchTab(name){
+  if((name==="receipt"||name==="reminder")&&!feeToolsUnlocked){openFeeLogin(name);return;}
+  document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("tab-"+name).classList.add("active");
+  document.querySelector('.tab-btn[data-tab="'+name+'"]').classList.add("active");
+}
+
+/* ============================================================
+   ATTENDANCE TAB — logic unchanged, ids/functions namespaced
+   ============================================================ */
+(function(){
+  function currentDeviceDate(){
+    const d=new Date();
+    const day=String(d.getDate()).padStart(2,'0');
+    const month=d.toLocaleString('en-US',{month:'long'});
+    const year=d.getFullYear();
+    return `${day} ${month} ${year}`;
+  }
+  document.getElementById("att-date").value=currentDeviceDate();
+
+  const classInput=document.getElementById("att-className");
+  const classError=document.getElementById("att-classError");
+  function validateClassName(){
+    const value=classInput.value.trim();
+    const invalid=/(?:^|\s)(?:fee|reminder|receipt|attendance|[0-9]+\s*(?:rs|rupees))(?=\s|$)/i.test(value);
+    classError.classList.toggle("show",invalid);
+    classError.textContent="صرف کلاس نام لکھنا ہے";
+    return !invalid;
+  }
+  classInput.addEventListener("input",()=>{
+    const pos=classInput.selectionStart;
+    classInput.value=classInput.value.toUpperCase();
+    classInput.setSelectionRange(pos,pos);
+    validateClassName();
+  });
+
+  function capitalizeWords(value){
+    return value.replace(/(^|\s)(\S)/g,(m,space,letter)=>space+letter.toUpperCase());
+  }
+
+  function updateCounts(){
+    document.getElementById("att-absentCount").textContent = getNames("absent").length;
+    document.getElementById("att-leaveCount").textContent = getNames("leave").length;
+  }
+
+  function renumber(type){
+    const list=document.getElementById("att-"+type+"List");
+    [...list.querySelectorAll(".roll-no")].forEach((el,i)=>{el.textContent=i+1;});
+  }
+
+  function addStudent(type){
+    const list=document.getElementById("att-"+type+"List");
+    const row=document.createElement("div");
+    row.className="row";
+    const rollNo=list.children.length+1;
+    row.innerHTML=`<span class="roll-no">${rollNo}</span>
+                   <input type="text" class="att-${type}" placeholder="Student name">
+                   <button class="remove" type="button" aria-label="Remove">×</button>`;
+    list.appendChild(row);
+    const input=row.querySelector("input");
+    input.addEventListener("input",()=>{
+      const pos=input.selectionStart;
+      input.value=capitalizeWords(input.value);
+      input.setSelectionRange(pos,pos);
+      updateCounts();
+    });
+    row.querySelector(".remove").addEventListener("click",()=>{
+      row.remove();
+      renumber(type);
+      updateCounts();
+    });
+    input.focus();
+    updateCounts();
+  }
+
+  function getNames(cls){
+    return [...document.querySelectorAll(".att-"+cls)]
+      .map(x=>x.value.trim()).filter(Boolean);
+  }
+
+  function makeMessage(){
+    const cls=document.getElementById("att-className").value.trim() || "CLASS";
+    const absent=getNames("absent");
+    const leave=getNames("leave");
+    const master=document.getElementById("att-master").value.trim();
+
+    let msg=`*CLASS ${cls}  |  ATTENDANCE*\n`;
+    msg+=`Date: ${document.getElementById("att-date").value}\n\n`;
+    msg+=`*ABSENT STUDENTS*\n`;
+
+    if(absent.length){
+      absent.forEach((student,i)=>{ msg+=`${i+1}. ${student}\n`; });
+    }else{
+      msg+="No absent students\n";
+    }
+
+    msg+=`\n*STUDENTS ON LEAVE*\n`;
+    if(leave.length){
+      leave.forEach((student,i)=>{ msg+=`${i+1}. ${student}\n`; });
+    }else{
+      msg+="None";
+    }
+    if(master){msg+=`\n\nForm Master: *${master}*`;}
+    return msg;
+  }
+
+  // Converts a Pakistani number in any common local format into the
+  // digits-only international format wa.me requires.
+  function normalizePhone(raw){
+    let digits = raw.replace(/\D/g,"");
+    if(digits.startsWith("0")){ digits = "92" + digits.slice(1); }
+    else if(!digits.startsWith("92")){ digits = "92" + digits; }
+    return digits;
+  }
+
+  function sendWhatsApp(number){
+    if(!validateClassName()){classInput.focus();return;}
+    const msg=makeMessage();
+    const phone=normalizePhone(number);
+    const url="https://wa.me/"+phone+"?text="+encodeURIComponent(msg);
+    window.open(url,"_blank");
+  }
+
+  addStudent("absent");
+  addStudent("leave");
+
+  const title=document.getElementById("attendanceTitle");
+  title.textContent="ATTENDANCE";
+  title.classList.add("glitch");
+
+  window.attAddStudent=addStudent;
+  window.attSendWhatsApp=sendWhatsApp;
+})();
+
+/* ============================================================
+   FEE RECEIPT TAB — logic unchanged, ids namespaced with fr- prefix
+   (only the "date" field id was renamed to fr-date to avoid
+   clashing with the Attendance tab's own date field)
+   ============================================================ */
+(function () {
+  var FEE_TYPES = [
+    { id: "monthly", label: "Monthly Fee", ur: "ماہانہ فیس" },
+    { id: "admission", label: "Admission Fee", ur: "داخلہ فیس" },
+    { id: "promotion", label: "Promotion Fee", ur: "پروموشن فیس" },
+    { id: "exam", label: "Exam Fee", ur: "امتحانی فیس" }
+  ];
+
+  function todayISO() {
+    var d = new Date();
+    var m = String(d.getMonth() + 1).padStart(2, "0");
+    var day = String(d.getDate()).padStart(2, "0");
+    return d.getFullYear() + "-" + m + "-" + day;
+  }
+  function formatDate(iso) {
+    if (!iso) return "—";
+    var parts = iso.split("-");
+    var d = new Date(parts[0], parts[1] - 1, parts[2]);
+    var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    return String(d.getDate()).padStart(2,"0") + " " + months[d.getMonth()] + " " + d.getFullYear();
+  }
+  function normalizePhone(raw) {
+    var p = (raw || "").replace(/[^\d+]/g, "");
+    if (p.indexOf("+") === 0) p = p.slice(1);
+    if (p.indexOf("0") === 0) p = "92" + p.slice(1);
+    if (p.indexOf("92") === 0) return p;
+    if (p.length === 10) return "92" + p;
+    return p;
+  }
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  function getFeeState() {
+    var state = {};
+    var selected=$("fr-feeTypeSelect").value;
+    FEE_TYPES.forEach(function(f){
+      state[f.id]={checked:f.id===selected,amount:f.id===selected?$("fr-selectedAmount").value:""};
+    });
+    return state;
+  }
+
+  function buildDefaultMessage(feeState, hasArrears) {
+    var labels = FEE_TYPES.filter(function (f) { return feeState[f.id].checked; }).map(function (f) { return f.ur; });
+    var phrase;
+    if (labels.length === 0) phrase = "فیس";
+    else if (labels.length === 1) phrase = labels[0];
+    else phrase = labels.slice(0, -1).join("، ") + " اور " + labels[labels.length - 1];
+    var msg = "السلام علیکم" + "\n" + "آپ کے بچے کی " + phrase + " جمع ہو گئی ہے۔ شکریہ!!";
+    if (hasArrears) msg += "\nآپ کے بقایا جات (Arrears) ابھی باقی ہیں، براہ کرم انہیں جلد از جلد جمع کروائیں۔ کسی بھی مسئلے کی صورت میں اسکول انتظامیہ سے رابطہ کریں۔";
+    return msg;
+  }
+
+  function calcTotals(feeState) {
+    var feesTotal = 0;
+    FEE_TYPES.forEach(function (f) {
+      if (feeState[f.id].checked) feesTotal += Number(feeState[f.id].amount) || 0;
+    });
+    var arrears = Number($("fr-arrears").value) || 0;
+    return { feesTotal: feesTotal, arrears: arrears, grand: feesTotal };
+  }
+
+  function updateMessageIfAuto() {
+    var feeState = getFeeState();
+    var totals = calcTotals(feeState);
+    $("fr-message").value = buildDefaultMessage(feeState, totals.arrears > 0);
+  }
+
+  function render() {
+    var feeState = getFeeState();
+    var totals = calcTotals(feeState);
+
+    var selectedFee=$("fr-feeTypeSelect").value;
+    $("fr-feeAmountField").classList.toggle("show",!!selectedFee);
+    $("fr-periodField").style.display=selectedFee==="monthly"?"block":"none";
+
+    $("fr-formTotal").textContent = "Rs. " + totals.grand;
+
+    $("fr-p-student").textContent = $("fr-studentName").value || "—";
+    $("fr-p-class").textContent = $("fr-studentClass").value || "—";
+    $("fr-p-date").textContent = formatDate($("fr-date").value);
+
+    var feeListHtml = "";
+    var selected = FEE_TYPES.filter(function (f) { return feeState[f.id].checked; });
+    if (selected.length === 0) {
+      feeListHtml = '<div style="font-size:13px; color: var(--ink-soft);">No fee type selected</div>';
+    } else {
+      selected.forEach(function (f) {
+        var suffix = (f.id === "monthly" && $("fr-period").value) ? " — " + $("fr-period").value : "";
+        feeListHtml += '<div class="fee-line"><span>' + f.label + suffix + '</span><span class="amt">Rs. ' + (feeState[f.id].amount || 0) + '</span></div>';
+      });
+    }
+    $("fr-p-feeList").innerHTML = feeListHtml;
+    $("fr-p-total").textContent = "Rs. " + totals.grand;
+    $("fr-p-arrears").textContent = "Rs. " + totals.arrears;
+    $("fr-arrearsRow").style.display = totals.arrears > 0 ? "flex" : "none";
+    $("fr-p-message").textContent = $("fr-message").value;
+  }
+
+  function buildWaMessage() {
+    var feeState = getFeeState();
+    var totals = calcTotals(feeState);
+    var lines = [
+      "*PPS FEE RECEIPT*",
+      "*Date:* " + formatDate($("fr-date").value),
+      "*Receipt No:* " + ($("fr-receiptNo").value || "—"),
+      "*Student:* " + ($("fr-studentName").value || "—"),
+      "*Class:* " + ($("fr-studentClass").value || "—")
+    ];
+    FEE_TYPES.forEach(function (f) {
+      if (feeState[f.id].checked) {
+        var suffix = (f.id === "monthly" && $("fr-period").value) ? " (" + $("fr-period").value + ")" : "";
+        lines.push("*" + f.label + suffix + ":* Rs. " + (feeState[f.id].amount || 0));
+      }
+    });
+    lines.push("*Total received:* Rs. " + totals.grand);
+    if (totals.arrears > 0) lines.push("*Arrears (بقایا جات):* Rs. " + totals.arrears);
+    lines.push("");
+    var msgLines = $("fr-message").value.split("\n");
+    msgLines.forEach(function (l) {
+      if (l.trim() !== "") lines.push("*" + l + "*");
+    });
+    return lines.join("\n");
+  }
+
+  function buildSmsMessage() {
+    return buildWaMessage().replace(/\*/g, "");
+  }
+
+  function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent);
+  }
+
+  var RECORDS_KEY = "pps_fee_records_v1";
+
+  function getRecords() {
+    try {
+      var raw = localStorage.getItem(RECORDS_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) { return []; }
+  }
+  function setRecords(records) {
+    try { localStorage.setItem(RECORDS_KEY, JSON.stringify(records)); return true; }
+    catch (e) { return false; }
+  }
+  function renderRecordsSummary() {
+    var records = getRecords();
+    var total = records.reduce(function (sum, r) { return sum + (Number(r.total) || 0); }, 0);
+    $("fr-recordCount").textContent = records.length;
+    $("fr-recordTotal").textContent = "Rs. " + total;
+  }
+  function saveCurrentReceiptToRecords() {
+    var feeState = getFeeState();
+    var totals = calcTotals(feeState);
+    var records = getRecords();
+    var record = {
+      id: Date.now(),
+      date: $("fr-date").value || todayISO(),
+      receiptNo: $("fr-receiptNo").value || "",
+      studentName: $("fr-studentName").value || "",
+      studentClass: $("fr-studentClass").value || "",
+      total: totals.grand
+    };
+    records.push(record);
+    setRecords(records);
+    renderRecordsSummary();
+    return appendRecordToSheet(record);
+  }
+
+  function exportRecordsAsPdf() {
+    var records = getRecords();
+    var total = records.reduce(function (sum, r) { return sum + (Number(r.total) || 0); }, 0);
+    var rowsHtml = records.length === 0
+      ? '<tr><td colspan="5" style="text-align:center; color:#697182; padding:16px;">No saved receipts yet</td></tr>'
+      : records.map(function (r) {
+          return "<tr>" +
+            "<td>" + formatDate(r.date) + "</td>" +
+            "<td>" + (r.receiptNo || "—") + "</td>" +
+            "<td>" + (r.studentName || "—") + "</td>" +
+            "<td>" + (r.studentClass || "—") + "</td>" +
+            "<td style='text-align:right;'>Rs. " + r.total + "</td>" +
+          "</tr>";
+        }).join("");
+
+    var html =
+      "<!doctype html><html><head><meta charset='UTF-8'><title>PPS Income Report</title>" +
+      "<style>" +
+      "body{font-family:Arial,sans-serif;color:#1B2434;padding:24px;}" +
+      "h1{font-size:20px;margin-bottom:2px;}" +
+      "p.sub{color:#697182;margin-top:0;font-size:13px;}" +
+      "table{width:100%;border-collapse:collapse;margin-top:16px;font-size:13px;}" +
+      "th,td{border:1px solid #E2E5EB;padding:8px 10px;text-align:left;}" +
+      "th{background:#F2F4F7;}" +
+      "tfoot td{font-weight:bold;background:#E4F4F2;}" +
+      "</style></head><body>" +
+      "<h1>PPS FEE RECEIPT — Income Report</h1>" +
+      "<p class='sub'>Generated " + formatDate(todayISO()) + " · Total received only (arrears excluded)</p>" +
+      "<table><thead><tr><th>Date</th><th>Receipt No.</th><th>Student</th><th>Class</th><th style='text-align:right;'>Total received</th></tr></thead>" +
+      "<tbody>" + rowsHtml + "</tbody>" +
+      "<tfoot><tr><td colspan='4'>Grand total</td><td style='text-align:right;'>Rs. " + total + "</td></tr></tfoot>" +
+      "</table></body></html>";
+
+    var w = window.open("", "_blank");
+    if (!w) return;
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
+    w.focus();
+    setTimeout(function () { w.print(); }, 300);
+  }
+
+  // --- Google Drive / Sheets live sync ---
+  var GOOGLE_CLIENT_ID = "YOUR_CLIENT_ID.apps.googleusercontent.com";
+  var SPREADSHEET_ID = "1ffQU8Mo_CNSyr8auAOGCIMFdVU6iTuKM_NgX1jtXwXs";
+  var SHEET_RANGE = "Sheet1!A1";
+
+  var driveAccessToken = null;
+  var tokenClient = null;
+
+  function initGoogleAuth() {
+    if (!window.google || !google.accounts || GOOGLE_CLIENT_ID.indexOf("YOUR_CLIENT_ID") === 0) {
+      $("fr-driveStatus").textContent = "Google sign-in not configured yet.";
+      return;
+    }
+    tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: GOOGLE_CLIENT_ID,
+      scope: "https://www.googleapis.com/auth/spreadsheets",
+      callback: function (resp) {
+        if (resp && resp.access_token) {
+          driveAccessToken = resp.access_token;
+          $("fr-driveStatus").textContent = "✅ Connected — new saves sync to Google Sheet automatically.";
+          $("fr-btnConnectDrive").textContent = "🔗 Reconnect Google Account";
+        }
+      }
+    });
+  }
+  function connectGoogleDrive() {
+    if (!tokenClient) { initGoogleAuth(); }
+    if (tokenClient) tokenClient.requestAccessToken();
+  }
+  function appendRecordToSheet(record) {
+    if (!driveAccessToken) return Promise.resolve(false);
+    var url = "https://sheets.googleapis.com/v4/spreadsheets/" + SPREADSHEET_ID +
+      "/values/" + encodeURIComponent(SHEET_RANGE) + ":append?valueInputOption=USER_ENTERED";
+    return fetch(url, {
+      method: "POST",
+      headers: { "Authorization": "Bearer " + driveAccessToken, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        values: [[ formatDate(record.date), record.receiptNo, record.studentName, record.studentClass, record.total ]]
+      })
+    }).then(function (r) { return r.ok; }).catch(function () { return false; });
+  }
+
+  function buildRecordsBackupText() {
+    var records = getRecords();
+    var lines = ["Date,Receipt No.,Student Name,Class,Total Received (Rs.)"];
+    records.forEach(function (r) {
+      lines.push([formatDate(r.date), r.receiptNo || "", r.studentName || "", r.studentClass || "", r.total].join(","));
+    });
+    return lines.join("\n");
+  }
+
+  $("fr-date").value=todayISO();
+  $("fr-feeTypeSelect").value="monthly";
+  $("fr-feeAmountField").classList.add("show");
+  $("fr-periodField").style.display="block";
+  updateMessageIfAuto();
+  render();
+  renderRecordsSummary();
+
+  ["fr-date","fr-receiptNo","fr-studentName","fr-studentClass","fr-period","fr-guardianPhone"].forEach(function (id) {
+    $(id).addEventListener("input", render);
+  });
+  $("fr-arrears").addEventListener("input", function () { updateMessageIfAuto(); render(); });
+  $("fr-message").addEventListener("input", render);
+  $("fr-feeTypeSelect").addEventListener("change",function(){
+    $("fr-feeAmountField").classList.toggle("show",!!this.value);
+    $("fr-periodField").style.display=this.value==="monthly"?"block":"none";
+    $("fr-selectedAmount").value="";
+    updateMessageIfAuto();render();
+  });
+  $("fr-selectedAmount").addEventListener("input",function(){updateMessageIfAuto();render();});
+  $("fr-btnPrint").addEventListener("click", function () { window.print(); });
+  $("fr-btnCopy").addEventListener("click", function () {
+    var text = buildWaMessage();
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text); }
+    else {
+      var ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      document.execCommand("copy"); document.body.removeChild(ta);
+    }
+    var btn = $("fr-btnCopy"); var old = btn.textContent;
+    btn.textContent = "✅ Copied"; setTimeout(function () { btn.textContent = old; }, 1500);
+  });
+  $("fr-btnWhatsapp").addEventListener("click", function () {
+    var phone = normalizePhone($("fr-guardianPhone").value);
+    var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(buildWaMessage());
+    window.open(url, "_blank");
+  });
+  $("fr-btnSms").addEventListener("click", function () {
+    var normalized = normalizePhone($("fr-guardianPhone").value);
+    var number = normalized ? "+" + normalized : "";
+    var sep = isIOS() ? "&" : "?";
+    var url = "sms:" + number + sep + "body=" + encodeURIComponent(buildSmsMessage());
+    window.open(url, "_self");
+  });
+  $("fr-btnSaveRecord").addEventListener("click", function () {
+    var btn = $("fr-btnSaveRecord"); var old = btn.textContent;
+    var synced = !!driveAccessToken;
+    saveCurrentReceiptToRecords().then(function (ok) {
+      btn.textContent = synced && ok ? "✅ Saved & synced to Drive" : "✅ Saved locally";
+      setTimeout(function () { btn.textContent = old; }, 1800);
+    });
+  });
+  $("fr-btnConnectDrive").addEventListener("click", connectGoogleDrive);
+  initGoogleAuth();
+  $("fr-btnExportPdf").addEventListener("click", exportRecordsAsPdf);
+  $("fr-btnCopyRecords").addEventListener("click", function () {
+    var text = buildRecordsBackupText();
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text); }
+    else {
+      var ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      document.execCommand("copy"); document.body.removeChild(ta);
+    }
+    var btn = $("fr-btnCopyRecords"); var old = btn.textContent;
+    btn.textContent = "✅ Copied — paste it to Claude"; setTimeout(function () { btn.textContent = old; }, 2000);
+  });
+  $("fr-btnClearRecords").addEventListener("click", function () {
+    if (window.confirm("Clear all saved income records on this device? This cannot be undone.")) {
+      setRecords([]); renderRecordsSummary();
+    }
+  });
+})();
+
+/* ============================================================
+   FEE REMINDER TAB — logic unchanged, ids namespaced with fm- prefix
+   (only "className" was renamed to fm-className to avoid clashing
+   with the Attendance tab's own class field)
+   ============================================================ */
+(function(){
+  const fields=["fm-student","fm-className","fm-previous","fm-current","fm-promotion","fm-admission","fm-phone"];
+  const feeIds=["fm-previous","fm-current","fm-promotion","fm-admission"];
+  feeIds.forEach(id=>document.getElementById(id).addEventListener("input",updateTotal));
+
+  function amount(id){return Number(document.getElementById(id).value)||0}
+  function val(id){return document.getElementById(id).value.trim()}
+  function fmt(n){return n.toLocaleString("en-PK")}
+  function updateTotal(){
+    const total=feeIds.reduce((s,id)=>s+amount(id),0);
+    document.getElementById("fm-total").textContent="Rs. "+fmt(total);
+  }
+  function buildMessage(whatsapp=false){
+    const student=val("fm-student")||"[Student Name]", cls=val("fm-className")||"[Class]";
+    const previous=amount("fm-previous"),current=amount("fm-current"),promotion=amount("fm-promotion"),admission=amount("fm-admission");
+    const total=previous+current+promotion+admission, rows=[];
+    if(previous)rows.push(["پچھلے بقایا جات",previous]);
+    if(current)rows.push(["موجودہ فیس",current]);
+    if(promotion)rows.push(["پروموشن فیس",promotion]);
+    if(admission)rows.push(["داخلہ فیس",admission]);
+    if(whatsapp){
+      const B=t=>`*${t}*`;
+      return `السلام علیکم!
+
+امید ہے کہ آپ خیریت و عافیت سے ہوں گے۔ اللہ تعالیٰ آپ کو اور آپ کے اہلِ خانہ کو ہمیشہ خوش و سلامت رکھے۔
+
+آپ کو مؤدبانہ اطلاع دی جاتی ہے کہ آپ کے بچے ${B(student)}، جماعت ${B(cls)} کی فیس کے سلسلے میں درج ذیل رقم واجب الادا ہے:
+
+${rows.map(([l,n])=>B(l+": "+fmt(n)+" روپے")).join("\n")}
+${B("کل واجب الادا رقم: "+fmt(total)+" روپے")}
+
+براہِ کرم اپنی سہولت کے مطابق اپنے بچے کی فیس جلد از جلد جمع کروا دیں، تاکہ فیس کا ریکارڈ بروقت مکمل کیا جا سکے۔
+
+آپ کے تعاون اور بروقت ادائیگی کا تہہ دل سے شکریہ۔
+
+${B("اکاؤنٹنٹ")}
+${B("پنجکوڑہ پبلک ہائی سکول")}`;
+    }
+    return `السلام علیکم!
+
+امید ہے کہ آپ خیریت و عافیت سے ہوں گے۔ اللہ تعالیٰ آپ کو اور آپ کے اہلِ خانہ کو ہمیشہ خوش و سلامت رکھے۔
+
+آپ کو مؤدبانہ اطلاع دی جاتی ہے کہ آپ کے بچے ${student}، جماعت ${cls} کی فیس کے سلسلے میں درج ذیل رقم واجب الادا ہے:
+
+${rows.map(([l,n])=>l+": "+fmt(n)+" روپے").join("\n")}
+کل واجب الادا رقم: ${fmt(total)} روپے
+
+براہِ کرم اپنی سہولت کے مطابق اپنے بچے کی فیس جلد از جلد جمع کروا دیں، تاکہ فیس کا ریکارڈ بروقت مکمل کیا جا سکے۔
+
+آپ کے تعاون اور بروقت ادائیگی کا تہہ دل سے شکریہ۔
+
+اکاؤنٹنٹ
+پنجکوڑہ پبلک ہائی سکول`;
+  }
+  function normalizedPhone(){let p=val("fm-phone").replace(/\D/g,"");if(p.startsWith("0"))p="92"+p.slice(1);return p}
+  function sendWhatsApp(){const p=normalizedPhone();if(!p){alert("Please enter the mobile number.");return}window.open("https://wa.me/"+p+"?text="+encodeURIComponent(buildMessage(true)),"_blank")}
+  function sendSMS(){let p=val("fm-phone").replace(/[^\d+]/g,"");if(!p){alert("Please enter the mobile number.");return}window.open("sms:"+p+"?body="+encodeURIComponent(buildMessage(false)),"_self")}
+  function togglePreview(){
+    const box=document.getElementById("fm-previewBox");
+    box.classList.toggle("show");
+    if(box.classList.contains("show"))document.getElementById("fm-previewText").textContent=buildMessage(true).replace(/\*/g,"");
+  }
+  async function copyMessage(){
+    try{await navigator.clipboard.writeText(buildMessage(false));alert("Message copied successfully.");}
+    catch(e){alert("Copy is not available on this device.")}
+  }
+  function resetForm(){
+    fields.forEach(id=>document.getElementById(id).value="");
+    updateTotal();document.getElementById("fm-previewBox").classList.remove("show");
+  }
+  document.getElementById("fm-dateDisplay").textContent=new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"long",year:"numeric"});
+  fields.forEach((id,i)=>{
+    document.getElementById(id).addEventListener("keydown",e=>{
+      if(e.key==="Enter" && i<fields.length-1){e.preventDefault();document.getElementById(fields[i+1]).focus();}
+    });
+  });
+  updateTotal();
+
+  window.fmTogglePreview=togglePreview;
+  window.fmSendWhatsApp=sendWhatsApp;
+  window.fmSendSMS=sendSMS;
+  window.fmResetForm=resetForm;
+  window.fmCopyMessage=copyMessage;
+})();
+</script>
+</body>
+</html>
