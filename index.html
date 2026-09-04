@@ -389,7 +389,7 @@ input[readonly]{color:var(--ink-soft)}
 /* GLITCH TITLES */
 h1,.panel-title{text-transform:uppercase}
 #attendanceTitle{position:relative;display:inline-block}
-#attendanceTitle.glitch,.panel-title.glitch{animation:glitchTitle 1.0s steps(1,end) infinite}
+#attendanceTitle.glitch,.panel-title.glitch{animation:glitchTitle 1.8s steps(1,end) infinite}
 @keyframes glitchTitle{0%,88%,100%{transform:none;text-shadow:none}89%{transform:translate(-2px,1px);text-shadow:2px 0 #ff3b81,-2px 0 #20d9ff}90%{transform:translate(2px,-1px);text-shadow:-2px 0 #ff3b81,2px 0 #20d9ff}91%{transform:none;text-shadow:none}93%{transform:translate(-1px,0);text-shadow:1px 0 #20d9ff,-1px 0 #ff3b81}94%{transform:none;text-shadow:none}}
 .att-letter{animation:none!important;opacity:1}
 
@@ -416,14 +416,14 @@ h1,.panel-title{text-transform:uppercase}
     <div class="welcome-badge">👋</div>
     <span id="welcomeGreeting">Good Morning</span>
     <h2 class="welcome-title">Welcome, Teacher</h2>
-    <p class="welcome-sub">Mark attendance, send fee receipts, and send fee reminders — all from one place.</p>
-    <button class="welcome-start" type="button" onclick="attStartApp()">Get Started</button>
+    <p class="welcome-sub">Less Paper Work. More Teaching.</p>
+    <button class="welcome-start" type="button" onclick="attStartApp()">⚡Enter Portal</button>
   </div>
 </div>
 
 <div id="feeLogin" aria-hidden="true">
   <div class="fee-login-card">
-    <h2>FEE TOOLS LOGIN</h2>
+    <h2>EXPLORE MORE</h2>
     <input id="feeLoginPassword" type="password" placeholder="ENTER PASSWORD" autocomplete="off">
     <div class="fee-login-error" id="feeLoginError"></div>
     <div class="fee-login-actions">
@@ -597,8 +597,8 @@ h1,.panel-title{text-transform:uppercase}
   <section id="tab-reminder" class="tab-panel">
     <div class="card">
       <div class="head-row">
-        <h1 class="panel-title glitch">REMINDER</h1>
-        <span class="subtitle" id="fm-dateDisplay">FEE REMINDER</span>
+        <h1 class="panel-title glitch">FEE REMINDER</h1>
+        <span class="subtitle" id="fm-dateDisplay">REMINDER</span>
       </div>
 
       <div class="field"><span class="lbl">Student Name</span><input id="fm-student" type="text" autocomplete="off" placeholder="Enter student name"></div>
