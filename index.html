@@ -389,13 +389,13 @@ input[readonly]{color:var(--ink-soft)}
 /* GLITCH TITLES */
 h1,.panel-title{text-transform:uppercase}
 #attendanceTitle{position:relative;display:inline-block}
-#attendanceTitle.glitch,.panel-title.glitch{animation:glitchTitle 2.8s steps(1,end) infinite}
+#attendanceTitle.glitch,.panel-title.glitch{animation:glitchTitle 1.0s steps(1,end) infinite}
 @keyframes glitchTitle{0%,88%,100%{transform:none;text-shadow:none}89%{transform:translate(-2px,1px);text-shadow:2px 0 #ff3b81,-2px 0 #20d9ff}90%{transform:translate(2px,-1px);text-shadow:-2px 0 #ff3b81,2px 0 #20d9ff}91%{transform:none;text-shadow:none}93%{transform:translate(-1px,0);text-shadow:1px 0 #20d9ff,-1px 0 #ff3b81}94%{transform:none;text-shadow:none}}
 .att-letter{animation:none!important;opacity:1}
 
 /* NEON ATTENDANCE FIELD */
 #att-className{border:2px solid rgba(107,123,245,.65);box-shadow:0 0 8px rgba(107,123,245,.65),inset 0 2px 4px rgba(24,60,110,.08)}
-#att-className:focus{box-shadow:0 0 8px rgba(107,123,245,.8),0 0 18px rgba(107,123,245,.55),inset 0 2px 4px rgba(24,60,110,.08);animation:neonField 1.7s linear infinite}
+#att-className:focus{box-shadow:0 0 8px rgba(107,123,245,.8),0 0 18px rgba(107,123,245,.55),inset 0 2px 4px rgba(24,60,110,.08);animation:neonField 2.7s linear infinite}
 @keyframes neonField{0%{box-shadow:0 0 7px rgba(107,123,245,.7),0 0 0 2px rgba(107,123,245,.12)}25%{box-shadow:0 0 10px rgba(32,217,255,.85),0 0 0 2px rgba(32,217,255,.18)}50%{box-shadow:0 0 14px rgba(255,59,129,.8),0 0 0 2px rgba(255,59,129,.16)}75%{box-shadow:0 0 10px rgba(107,123,245,.85),0 0 0 2px rgba(107,123,245,.18)}100%{box-shadow:0 0 7px rgba(107,123,245,.7),0 0 0 2px rgba(107,123,245,.12)}}
 .att-class-error{display:none;margin-top:7px;padding:8px 12px;border-radius:14px;background:rgba(224,69,58,.12);color:#a92d25;font-size:13px;font-family:'Noto Nastaliq Urdu',serif;font-weight:700;text-align:right;direction:rtl}
 .att-class-error.show{display:block;animation:shake .25s linear}
@@ -473,12 +473,12 @@ h1,.panel-title{text-transform:uppercase}
       <button class="add" type="button" onclick="attAddStudent('leave')"><span class="plus">+</span> Add student on leave</button>
       <div class="hint">Add students who are on leave.</div>
 
-      <label>Form Master Name</label>
-      <input id="att-master" type="text" placeholder="Enter form master's name" autocomplete="off">
+      <label>CLASS TEACHER</label>
+      <input id="att-master" type="text" placeholder="Enter class teacher name" autocomplete="off">
 
       <div class="att-buttons">
-        <button class="stamp female" type="button" onclick="attSendWhatsApp('03400968477')">FEMALE STAFF</button>
-        <button class="stamp male" type="button" onclick="attSendWhatsApp('03099795054')">MALE STAFF</button>
+        <button class="stamp female" type="button" onclick="attSendWhatsApp('03400968477')">FEMALE</button>
+        <button class="stamp male" type="button" onclick="attSendWhatsApp('03099795054')">MALE</button>
       </div>
 
       <div id="preview"></div>
@@ -492,7 +492,7 @@ h1,.panel-title{text-transform:uppercase}
         <h1 class="panel-title glitch">FEE RECEIPT</h1>
         <span class="subtitle">PPS FEE RECEIPT</span>
       </div>
-      <p class="panel-desc">Fill in the details, then print or send straight to WhatsApp.</p>
+      <p class="panel-desc">Fill in the details.</p>
     </div>
 
     <div class="card no-print">
@@ -597,7 +597,7 @@ h1,.panel-title{text-transform:uppercase}
   <section id="tab-reminder" class="tab-panel">
     <div class="card">
       <div class="head-row">
-        <h1 class="panel-title glitch">FEE REMINDER</h1>
+        <h1 class="panel-title glitch">REMINDER</h1>
         <span class="subtitle" id="fm-dateDisplay">FEE REMINDER</span>
       </div>
 
