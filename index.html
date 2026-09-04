@@ -413,7 +413,7 @@ h1,.panel-title{text-transform:uppercase}
 <body>
 <div id="welcome">
   <div class="welcome-card">
-    <div class="welcome-badge">👋</div>
+    <div class="welcome-badge">😍👋</div>
     <span id="welcomeGreeting">Good Morning</span>
     <h2 class="welcome-title">Welcome, Teacher</h2>
     <p class="welcome-sub">Mark attendance, send fee receipts, and send fee reminders — all from one place.</p>
@@ -688,7 +688,7 @@ function submitFeeLogin(){
     closeFeeLogin();
     switchTab(target);
   }else{
-    document.getElementById("feeLoginError").textContent="غلط پاس ورڈ۔ دوبارہ کوشش کریں۔";
+    document.getElementById("feeLoginError").textContent="Wrong Password!!! Try Again";
     input.select();
   }
 }
@@ -881,7 +881,7 @@ function switchTab(name){
     else if (labels.length === 1) phrase = labels[0];
     else phrase = labels.slice(0, -1).join("، ") + " اور " + labels[labels.length - 1];
     var msg = "السلام علیکم" + "\n" + "آپ کے بچے کی " + phrase + " جمع ہو گئی ہے۔ شکریہ!!";
-    if (hasArrears) msg += "\nآپ کے بقایا جات (Arrears) ابھی باقی ہیں، براہ کرم انہیں جلد از جلد جمع کروائیں۔ کسی بھی مسئلے کی صورت میں اسکول انتظامیہ سے رابطہ کریں۔";
+    if (hasArrears) msg += "\nآپ کے بقایا جات (Arrears)  ابھی باقی ہیں، براہ کرم انہیں جلد از جلد جمع کروائیں۔ کسی بھی مسئلے کی صورت میں اسکول انتظامیہ سے رابطہ کریں۔";
     return msg;
   }
 
